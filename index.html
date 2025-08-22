@@ -54,7 +54,7 @@
       transition: var(--transition);
       scroll-behavior: smooth;
     }
-    /* Навигация */
+    /* Адаптивная навигация */
     .navbar {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -103,7 +103,6 @@
     body[data-theme="dark"] .navbar a:hover {
       background: #cab1dd24;
     }
-    .navbar .spacer { flex: 1 1 auto; }
     .theme-switch {
       margin-left: 18px;
       position: relative;
@@ -132,6 +131,48 @@
       fill: var(--switch-icon);
       transition: fill 0.3s;
     }
+    /* Бургер-меню */
+    .burger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin-left: 10px;
+      z-index: 150;
+      padding: 8px;
+    }
+    .burger span {
+      display: block;
+      width: 26px;
+      height: 3px;
+      margin: 6px 0;
+      background: var(--nav-link-active);
+      border-radius: 2px;
+      transition: all .29s cubic-bezier(.5,1.5,.24,1);
+    }
+    /* Выпадающее мобильное меню */
+    .navbar nav.mobile {
+      display: none;
+      position: absolute;
+      top: 62px; right: 10px;
+      background: var(--nav-bg);
+      box-shadow: var(--nav-shadow);
+      border-radius: 13px;
+      flex-direction: column;
+      min-width: 144px;
+      padding: 8px 0;
+      animation: fadeIn .2s;
+      z-index: 200;
+      gap: 0;
+    }
+    .navbar nav.mobile a {
+      display: block;
+      padding: 11px 22px;
+      font-size: 1.11rem;
+      border-radius: 0;
+      border-bottom: 1px solid #e5c9d045;
+    }
+    .navbar nav.mobile a:last-child { border-bottom: none; }
     /* Контент с отступом под меню */
     .site-content { padding-top: 70px; }
     header {
@@ -168,7 +209,7 @@
     }
     .gallery img {
       border-radius: var(--radius);
-      max-width: 300px;
+      max-width: 350px;
       width: 100%;
       height: 380px;
       object-fit: cover;
@@ -325,22 +366,57 @@
     #toTop:hover {
       background: var(--nav-link-active);
     }
+    @media (max-width: 1050px) {
+      .gallery img {
+        height: 270px;
+        max-width: 48vw;
+      }
+    }
     @media (max-width: 900px) {
       .gallery { gap: 10px; }
       .features { flex-direction: column; gap: 8px;}
       .model-text, .about {padding: 16px 3vw;}
       .navbar {padding: 0 12px;}
       .theme-switch {margin-left: 7px;}
+      .gallery img {
+        max-width: 95vw;
+        height: 38vw;
+        min-height: 120px;
+        min-width: 160px;
+      }
+    }
+    @media (max-width: 700px) {
+      .gallery img {
+        max-width: 95vw;
+        width: 98vw;
+        min-width: 120px;
+        height: 37vw;
+        min-height: 100px;
+      }
     }
     @media (max-width: 640px) {
-      header h1 { font-size: 1.35rem;}
-      .gallery img {height: 170px; max-width: 97vw;}
+      header h1 { font-size: 1.13rem;}
+      .gallery img {height: 38vw; min-height: 100px; max-width: 99vw;}
       .theme-switch {width: 34px; height: 34px;}
       .theme-switch svg {width: 17px; height: 17px;}
       .navbar {height: 48px;}
       .navbar .logo {font-size: 1rem;}
       .navbar nav a {font-size: 0.98rem;}
       #toTop {right: 12px; bottom: 16px; width: 36px; height: 36px; font-size: 1.2rem;}
+    }
+    @media (max-width: 540px) {
+      .navbar {padding: 0 6px;}
+      .gallery img {height: 34vw; min-height: 90px;}
+    }
+    @media (max-width: 530px) {
+      .gallery {gap: 6px;}
+      .gallery img {height: 120px; min-height: 80px;}
+      .model-text, .about {padding: 11px 2vw;}
+    }
+    @media (max-width: 700px) {
+      .navbar nav {display: none;}
+      .burger {display: inline-block;}
+      .navbar nav.mobile {display: flex;}
     }
     /* Animations */
     @keyframes fadeInDown {
@@ -370,9 +446,11 @@
     <a href="#about">О Damian</a>
     <a href="#contacts">Контакты</a>
   </nav>
+  <button class="burger" id="burger" aria-label="Меню" title="Меню">
+    <span></span><span></span><span></span>
+  </button>
   <button class="theme-switch" id="themeSwitch" aria-label="Сменить тему" title="Сменить тему">
     <svg id="themeIcon" viewBox="0 0 24 24">
-      <!-- Солнце (по умолчанию) -->
       <circle cx="12" cy="12" r="5"/>
       <g>
         <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2"/>
@@ -387,7 +465,11 @@
     </svg>
   </button>
 </div>
-
+<nav class="mobile" id="mobileNav" style="display:none;">
+  <a href="#main" class="active">Главная</a>
+  <a href="#about">О Damian</a>
+  <a href="#contacts">Контакты</a>
+</nav>
 <div class="site-content">
   <header id="main">
     <h1>Doberman Model Damian</h1>
@@ -395,9 +477,9 @@
   </header>
 
   <section class="gallery">
-    <img src="photo_19_2025-08-20_14-17-10.jpg" alt="Doberman Damian на съемке с моделью, фиолетовый фон">
-    <img src="photo_20_2025-08-20_14-17-10.jpg" alt="Doberman Damian на фоне светового круга, с моделью">
-    <img src="photo_21_2025-08-20_14-17-10.jpg" alt="Doberman Damian позирует в художественном свете">
+    <img src="photo9.jpg" alt="Doberman Damian на съемке с моделью, фиолетовый фон">
+    <img src="photo10.jpg" alt="Doberman Damian на фоне светового круга, с моделью">
+    <img src="photo11.jpg" alt="Doberman Damian позирует в художественном свете">
   </section>
 
   <section class="model-text">
@@ -438,16 +520,11 @@
     <a href="https://www.instagram.com/doberman_damian?igsh=ZXJvNWk1bTduYnA2" target="_blank">Instagram: @doberman_damian</a>
   </section>
 </div>
-
 <!-- Кнопка вверх -->
-<button id="toTop" aria-label="Наверх" title="Наверх">
-  ▲
-</button>
-
+<button id="toTop" aria-label="Наверх" title="Наверх">▲</button>
 <script>
   // SVG для луны
   const moonSVG = `<path d="M21 12.79A9 9 0 0112.21 3c-.55 0-.84.66-.45 1.08A7 7 0 1019.92 14.24c.42.38 1.08.09 1.08-.45z"/>`;
-
   // SVG для солнца
   const sunSVG = `<circle cx="12" cy="12" r="5"/>
     <g>
@@ -460,26 +537,21 @@
       <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2"/>
       <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2"/>
     </g>`;
-
   const btn = document.getElementById('themeSwitch');
   const icon = document.getElementById('themeIcon');
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
   function setTheme(theme) {
     document.body.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
     icon.innerHTML = theme === 'dark' ? moonSVG : sunSVG;
   }
-
   const savedTheme = localStorage.getItem('theme');
   setTheme(savedTheme ? savedTheme : (prefersDark ? 'dark' : 'light'));
-
   btn.addEventListener('click', () => {
     const current = document.body.getAttribute('data-theme');
     const next = current === 'dark' ? 'light' : 'dark';
     setTheme(next);
   });
-
   // Кнопка вверх
   const toTopBtn = document.getElementById('toTop');
   window.addEventListener('scroll', function() {
@@ -492,9 +564,8 @@
   toTopBtn.addEventListener('click', function() {
     window.scrollTo({top: 0, behavior: 'smooth'});
   });
-
   // Навигация: активный пункт
-  const navLinks = document.querySelectorAll('.navbar nav a');
+  const navLinks = document.querySelectorAll('.navbar nav a, nav.mobile a');
   function setActiveNav() {
     let fromTop = window.scrollY + 80;
     navLinks.forEach(link => {
@@ -511,9 +582,8 @@
   }
   window.addEventListener('scroll', setActiveNav);
   window.addEventListener('load', setActiveNav);
-
   // Плавный переход по якорям
-  document.querySelectorAll('.navbar nav a, .navbar .logo').forEach(link => {
+  document.querySelectorAll('.navbar nav a, .navbar .logo, nav.mobile a').forEach(link => {
     link.addEventListener('click', function(e){
       const hash = this.getAttribute('href');
       if (hash && hash.startsWith('#')) {
@@ -522,8 +592,32 @@
         if (target) {
           window.scrollTo({top: target.offsetTop - 60, behavior: 'smooth'});
         }
+        // Закрываем мобильное меню при клике
+        if(window.innerWidth < 700){
+          document.getElementById("mobileNav").style.display = "none";
+        }
       }
     });
+  });
+  // Бургер-меню для мобилы
+  const burger = document.getElementById('burger');
+  const mobileNav = document.getElementById('mobileNav');
+  burger.addEventListener('click', function(){
+    mobileNav.style.display = (mobileNav.style.display === 'flex') ? 'none' : 'flex';
+  });
+  // При клике вне меню — скрывать мобильное меню
+  document.addEventListener('click', function(e){
+    if(window.innerWidth < 700){
+      if(!mobileNav.contains(e.target) && !burger.contains(e.target)){
+        mobileNav.style.display = 'none';
+      }
+    }
+  });
+  // При ресайзе — скрывать/показывать меню
+  window.addEventListener('resize', function(){
+    if(window.innerWidth >= 700){
+      mobileNav.style.display = 'none';
+    }
   });
 </script>
 </body>
